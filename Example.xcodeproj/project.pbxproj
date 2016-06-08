@@ -12,7 +12,7 @@
 		29112E9A1D034E020094568F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29112E981D034E020094568F /* Main.storyboard */; };
 		29112E9C1D034E020094568F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29112E9B1D034E020094568F /* Assets.xcassets */; };
 		29112E9F1D034E020094568F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29112E9D1D034E020094568F /* LaunchScreen.storyboard */; };
-		29112EB71D034E790094568F /* FlickViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29112EB61D034E790094568F /* FlickViewController.swift */; };
+		29112EB71D034E790094568F /* FlickToDismissViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29112EB61D034E790094568F /* FlickToDismissViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +23,7 @@
 		29112E9B1D034E020094568F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		29112E9E1D034E020094568F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		29112EA01D034E020094568F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		29112EB61D034E790094568F /* FlickViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickViewController.swift; sourceTree = "<group>"; };
+		29112EB61D034E790094568F /* FlickToDismissViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickToDismissViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +69,7 @@
 		29112EB41D034E420094568F /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				29112EB61D034E790094568F /* FlickViewController.swift */,
+				29112EB61D034E790094568F /* FlickToDismissViewController.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -163,7 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29112E971D034E020094568F /* MainViewController.swift in Sources */,
-				29112EB71D034E790094568F /* FlickViewController.swift in Sources */,
+				29112EB71D034E790094568F /* FlickToDismissViewController.swift in Sources */,
 				29112E951D034E020094568F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
