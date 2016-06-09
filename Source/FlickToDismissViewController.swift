@@ -30,18 +30,18 @@ public class FlickToDismissViewController: UIViewController {
     // MARK:- Properties
     
     /// Flickable UIView.
-    @IBOutlet private var flickView: UIView!
+    @IBOutlet public var flickView: UIView!
     private var panGestureRecognizer: UIPanGestureRecognizer!
     /// Array of FlickViewOptions.
     private var options: [FlickViewOptions]?
     /// Indicates how fast the view must be moving in order to have the view continue moving.
-    @IBInspectable var flickThreshold: CGFloat = 1000
+    @IBInspectable public var flickThreshold: CGFloat = 1000
     /// The amount of oscillation of the flickView during the conclusion of a snap.
-    @IBInspectable var snapDamping: CGFloat = 0.5
-    /// Affects how fast or slow the toss should be.
-    @IBInspectable var flickVelocityMultiplier: CGFloat = 0.2
+    @IBInspectable public var snapDamping: CGFloat = 0.5
+    /// Affects how fast or slow the view is flicked off the screen.
+    @IBInspectable public var flickVelocityMultiplier: CGFloat = 0.2
     /// Animation presentation type. See AnimationType for all possible values.
-    @IBInspectable var animationType: String = "None"
+    @IBInspectable public var animationType: String = "None"
     /// Center of the flickable view before the pan starts
     private var originalCenter: CGPoint!
     // UIKit Dynamics
@@ -52,7 +52,7 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK:- Life Cycle
     
-    init(flickView: UIView, options: [FlickViewOptions]?) {
+    public init(flickView: UIView, options: [FlickViewOptions]?) {
         super.init(nibName: nil, bundle: nil)
         self.flickView = flickView
         self.options = options
@@ -154,7 +154,7 @@ public class FlickToDismissViewController: UIViewController {
     // MARK:- Convinience Methods
     
     /// Connect this to a button to dismiss the view controller.
-    @IBAction func dismissViewController() {
+    @IBAction public func dismissViewController() {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
