@@ -19,6 +19,12 @@ class MainViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: Status bar
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
 
 }
 
