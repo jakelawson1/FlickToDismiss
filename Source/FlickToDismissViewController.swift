@@ -9,7 +9,7 @@
 import UIKit
 
 /// Options used to customize the appearance and interaction.
-public enum FlickToDismissOptions {
+public enum FlickToDismissOption {
     case BackgroundColor(UIColor)
     case FlickThreshold(CGFloat)
     case FlickVelocityMultiplier(CGFloat)
@@ -33,7 +33,7 @@ public class FlickToDismissViewController: UIViewController {
     @IBOutlet public var flickableView: UIView!
     private var panGestureRecognizer: UIPanGestureRecognizer!
     /// Array of FlickToDismissOptions.
-    private var options: [FlickToDismissOptions]?
+    private var options: [FlickToDismissOption]?
     /// Indicates how fast the view must be moving in order to have the view continue moving.
     @IBInspectable public var flickThreshold: CGFloat = 1000
     /// The amount of oscillation of the flickableView during the conclusion of a snap.
@@ -52,7 +52,7 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK:- Life Cycle
     
-    public init(flickableView: UIView, options: [FlickToDismissOptions]?) {
+    public init(flickableView: UIView, options: [FlickToDismissOption]?) {
         super.init(nibName: nil, bundle: nil)
         self.flickableView = flickableView
         self.options = options
