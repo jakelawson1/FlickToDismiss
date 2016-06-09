@@ -14,6 +14,13 @@ public enum FlickViewOptions {
     case FlickThreshold(CGFloat)
     case FlickVelocity(CGFloat)
     case SnapDamping(CGFloat)
+    case Animation(AnimationType)
+}
+
+/// Different animation styles for presenting the flickable view.
+public enum AnimationType: String {
+    case None
+    case Scale
 }
 
 /// Presents a UIView which can dismissed by flicking it off the screen.
@@ -33,6 +40,8 @@ public class FlickToDismissViewController: UIViewController {
     @IBInspectable var snapDamping: CGFloat = 0.5
     /// Affects how fast or slow the toss should be.
     @IBInspectable var flickVelocity: CGFloat = 5
+    /// Animation presentation type. See AnimationType for all possible values.
+    @IBInspectable var animationType: String = "None"
     /// Center of the flickable view before the pan starts
     private var originalCenter: CGPoint!
     // UIKit Dynamics
@@ -58,6 +67,20 @@ public class FlickToDismissViewController: UIViewController {
         setup()
     }
     
+    public override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // Perform animation when view will appear
+        switch AnimationType.init(rawValue: animationType) ?? .None {
+        case .Scale:
+            UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5.0, options: .CurveEaseInOut, animations: ({
+                self.flickView.transform = CGAffineTransformIdentity
+                self.flickView.alpha = 1.0
+            }), completion: nil)
+        default:
+            break
+        }
+    }
+    
     // MARK:- Setup
 
     private func setup() {
@@ -77,8 +100,18 @@ public class FlickToDismissViewController: UIViewController {
                     flickVelocity = velocity
                 case .SnapDamping(let damping):
                     snapDamping = damping
+                case .Animation(let animation):
+                    animationType = animation.rawValue
                 }
             }
+        }
+        // Setup animation
+        switch AnimationType.init(rawValue: animationType) ?? .None {
+        case .Scale:
+            flickView.transform = CGAffineTransformMakeScale(0.8, 0.8)
+            flickView.alpha = 0.0
+        default:
+            break
         }
         flickView.addGestureRecognizer(panGestureRecognizer)
         view.addSubview(flickView)
@@ -120,7 +153,7 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK:- Convinience Methods
     
-    /// Connect this to a button to dismiss the view controller
+    /// Connect this to a button to dismiss the view controller.
     @IBAction func dismissViewController() {
         dismissViewControllerAnimated(true, completion: nil)
     }
