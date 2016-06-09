@@ -12,7 +12,7 @@ import UIKit
 public enum FlickViewOptions {
     case BackgroundColor(UIColor)
     case FlickThreshold(CGFloat)
-    case FlickVelocity(CGFloat)
+    case FlickVelocityMultiplier(CGFloat)
     case SnapDamping(CGFloat)
     case Animation(AnimationType)
 }
@@ -39,7 +39,7 @@ public class FlickToDismissViewController: UIViewController {
     /// The amount of oscillation of the flickView during the conclusion of a snap.
     @IBInspectable var snapDamping: CGFloat = 0.5
     /// Affects how fast or slow the toss should be.
-    @IBInspectable var flickVelocity: CGFloat = 5
+    @IBInspectable var flickVelocityMultiplier: CGFloat = 0.2
     /// Animation presentation type. See AnimationType for all possible values.
     @IBInspectable var animationType: String = "None"
     /// Center of the flickable view before the pan starts
@@ -96,8 +96,8 @@ public class FlickToDismissViewController: UIViewController {
                     view.backgroundColor = color
                 case .FlickThreshold(let threshold):
                     flickThreshold = threshold
-                case .FlickVelocity(let velocity):
-                    flickVelocity = velocity
+                case .FlickVelocityMultiplier(let multiplier):
+                    flickVelocityMultiplier = multiplier
                 case .SnapDamping(let damping):
                     snapDamping = damping
                 case .Animation(let animation):
@@ -143,7 +143,7 @@ public class FlickToDismissViewController: UIViewController {
             pushBehaviour = UIPushBehavior(items: [flickView], mode: .Instantaneous)
             pushBehaviour.pushDirection = CGVector(dx: velocity.x, dy: velocity.y)
             pushBehaviour.setTargetOffsetFromCenter(centerOffset, forItem: flickView)
-            pushBehaviour.magnitude = magnitude / flickVelocity
+            pushBehaviour.magnitude = magnitude * flickVelocityMultiplier
             animator.addBehavior(pushBehaviour)
             dismissViewControllerAnimated(true, completion: nil)
         default:
