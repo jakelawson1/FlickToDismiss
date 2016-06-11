@@ -42,8 +42,8 @@ public class FlickToDismissViewController: UIViewController {
     @IBInspectable public var flickVelocityMultiplier: CGFloat = 0.2
     /// Animation presentation type. See AnimationType for all possible values.
     @IBInspectable public var animationType: String = "None"
-    /// Center of the flickable view before the pan starts
-    private var originalCenter: CGPoint!
+    /// The point for the flickable view to return to if the view was not flicked off the screen
+    public var originalCenter: CGPoint?
     // UIKit Dynamics
     private var animator: UIDynamicAnimator!
     private var attachmentBehavior: UIAttachmentBehavior!
@@ -117,6 +117,15 @@ public class FlickToDismissViewController: UIViewController {
         view.addSubview(flickableView)
     }
     
+    // MARK: Layout
+    
+    public override func viewDidLayoutSubviews() {
+        // Only set the center if the view has constraints
+        if flickableView.constraints.count != 0 {
+            originalCenter = flickableView.center
+        }
+    }
+    
     // MARK:- Pan Gesture
     
     @objc private func handleAttachmentGesture(panGesture: UIPanGestureRecognizer) {
@@ -128,13 +137,12 @@ public class FlickToDismissViewController: UIViewController {
             let centerOffset = UIOffset(horizontal: boxLocation.x-flickableView.bounds.midX, vertical: boxLocation.y-flickableView.bounds.midY)
             attachmentBehavior = UIAttachmentBehavior(item: flickableView, offsetFromCenter: centerOffset, attachedToAnchor: location)
             animator.addBehavior(attachmentBehavior)
-            originalCenter = flickableView.center
         case .Ended:
             animator.removeAllBehaviors()
             let velocity = panGesture.velocityInView(view)
             let magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y))
             guard magnitude > flickThreshold else {
-                snapBehaviour = UISnapBehavior(item: flickableView, snapToPoint: originalCenter)
+                snapBehaviour = UISnapBehavior(item: flickableView, snapToPoint: originalCenter ?? view.center)
                 snapBehaviour.damping = snapDamping
                 animator.addBehavior(snapBehaviour)
                 return
@@ -151,7 +159,7 @@ public class FlickToDismissViewController: UIViewController {
         }
     }
     
-    // MARK:- Convinience Methods
+    // MARK:- Helpers
     
     /// Connect this to a button to dismiss the view controller.
     @IBAction public func dismissViewController() {
@@ -163,6 +171,10 @@ public class FlickToDismissViewController: UIViewController {
     public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         // Remove behaviors on rotation in order to satisfy constraints
         animator.removeAllBehaviors()
+        // Center view if there are no constraints
+        if flickableView.constraints.count == 0 {
+            flickableView.center = CGPoint(x: size.width/2, y: size.height/2)
+        }
     }
     
 }
