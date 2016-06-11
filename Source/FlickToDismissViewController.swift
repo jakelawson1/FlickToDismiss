@@ -114,6 +114,10 @@ public class FlickToDismissViewController: UIViewController {
             break
         }
         flickableView.addGestureRecognizer(panGestureRecognizer)
+        // If there are no constraints, center the view
+        if flickableView.constraints.count == 0 {
+            flickableView.center = view.center
+        }
         view.addSubview(flickableView)
     }
     
