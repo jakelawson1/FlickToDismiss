@@ -11,7 +11,7 @@
 
 ### Manual
 
-Add [FlickToDismissViewController.swift]() to your project in Xcode.
+Add [Source/FlickToDismissViewController.swift]() to your project in Xcode.
 
 ## Usage
 
