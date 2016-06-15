@@ -9,6 +9,26 @@
 
 ## Installation
 
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+To integrate FlickToDismiss into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+pod 'FlickToDismiss', '~> 0.9'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
 ### Manual
 
 Add [FlickToDismissViewController.swift](Source/FlickToDismissViewController.swift) to your project in Xcode.
