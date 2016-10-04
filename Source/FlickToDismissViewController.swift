@@ -10,45 +10,45 @@ import UIKit
 
 /// Options used to customize the appearance and interaction.
 public enum FlickToDismissOption {
-    case BackgroundColor(UIColor)
-    case FlickThreshold(CGFloat)
-    case FlickVelocityMultiplier(CGFloat)
-    case SnapDamping(CGFloat)
-    case Animation(AnimationType)
+    case backgroundColor(UIColor)
+    case flickThreshold(CGFloat)
+    case flickVelocityMultiplier(CGFloat)
+    case snapDamping(CGFloat)
+    case animation(AnimationType)
 }
 
 /// Different animation styles for presenting the flickable view.
 public enum AnimationType: String {
-    case None
-    case Scale
+    case none
+    case scale
 }
 
 /// Presents a UIView which can dismissed by flicking it off the screen.
 @IBDesignable
-public class FlickToDismissViewController: UIViewController {
+open class FlickToDismissViewController: UIViewController {
 
     // MARK:- Properties
     
     /// Flickable UIView.
-    @IBOutlet public var flickableView: UIView!
-    private var panGestureRecognizer: UIPanGestureRecognizer!
+    @IBOutlet open var flickableView: UIView!
+    fileprivate var panGestureRecognizer: UIPanGestureRecognizer!
     /// Array of FlickToDismissOptions.
-    private var options: [FlickToDismissOption]?
+    fileprivate var options: [FlickToDismissOption]?
     /// Indicates how fast the view must be moving in order to have the view continue moving.
-    @IBInspectable public var flickThreshold: CGFloat = 1000
+    @IBInspectable open var flickThreshold: CGFloat = 1000
     /// The amount of oscillation of the flickableView during the conclusion of a snap.
-    @IBInspectable public var snapDamping: CGFloat = 0.5
+    @IBInspectable open var snapDamping: CGFloat = 0.5
     /// Affects how fast or slow the view is flicked off the screen.
-    @IBInspectable public var flickVelocityMultiplier: CGFloat = 0.2
+    @IBInspectable open var flickVelocityMultiplier: CGFloat = 0.2
     /// Animation presentation type. See AnimationType for all possible values.
-    @IBInspectable public var animationType: String = "None"
+    @IBInspectable open var animationType: String = "none"
     /// The point for the flickable view to return to if the view was not flicked off the screen
-    public var originalCenter: CGPoint?
+    open var originalCenter: CGPoint?
     // UIKit Dynamics
-    private var animator: UIDynamicAnimator!
-    private var attachmentBehavior: UIAttachmentBehavior!
-    private var snapBehaviour: UISnapBehavior!
-    private var pushBehaviour: UIPushBehavior!
+    fileprivate var animator: UIDynamicAnimator!
+    fileprivate var attachmentBehavior: UIAttachmentBehavior!
+    fileprivate var snapBehaviour: UISnapBehavior!
+    fileprivate var pushBehaviour: UIPushBehavior!
     
     // MARK:- Life Cycle
     
@@ -62,18 +62,18 @@ public class FlickToDismissViewController: UIViewController {
         super.init(coder: aDecoder)
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Perform animation when view will appear
-        switch AnimationType.init(rawValue: animationType) ?? .None {
-        case .Scale:
-            UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5.0, options: .CurveEaseInOut, animations: ({
-                self.flickableView.transform = CGAffineTransformIdentity
+        switch AnimationType.init(rawValue: animationType) ?? .none {
+        case .scale:
+            UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5.0, options: UIViewAnimationOptions(), animations: ({
+                self.flickableView.transform = CGAffineTransform.identity
                 self.flickableView.alpha = 1.0
             }), completion: nil)
         default:
@@ -83,7 +83,7 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK:- Setup
 
-    private func setup() {
+    fileprivate func setup() {
         // Setup pan gesture
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(FlickToDismissViewController.handleAttachmentGesture(_:)))
         // Setup animator
@@ -92,23 +92,23 @@ public class FlickToDismissViewController: UIViewController {
         if let options = options {
             for option in options {
                 switch option {
-                case .BackgroundColor(let color):
+                case .backgroundColor(let color):
                     view.backgroundColor = color
-                case .FlickThreshold(let threshold):
+                case .flickThreshold(let threshold):
                     flickThreshold = threshold
-                case .FlickVelocityMultiplier(let multiplier):
+                case .flickVelocityMultiplier(let multiplier):
                     flickVelocityMultiplier = multiplier
-                case .SnapDamping(let damping):
+                case .snapDamping(let damping):
                     snapDamping = damping
-                case .Animation(let animation):
+                case .animation(let animation):
                     animationType = animation.rawValue
                 }
             }
         }
         // Setup animation
-        switch AnimationType.init(rawValue: animationType) ?? .None {
-        case .Scale:
-            flickableView.transform = CGAffineTransformMakeScale(0.8, 0.8)
+        switch AnimationType.init(rawValue: animationType) ?? .none {
+        case .scale:
+            flickableView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             flickableView.alpha = 0.0
         default:
             break
@@ -123,7 +123,7 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK: Layout
     
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         // Only set the center if the view has constraints
         if flickableView.constraints.count != 0 {
             originalCenter = flickableView.center
@@ -132,32 +132,32 @@ public class FlickToDismissViewController: UIViewController {
     
     // MARK:- Pan Gesture
     
-    @objc private func handleAttachmentGesture(panGesture: UIPanGestureRecognizer) {
-        let location = panGesture.locationInView(view)
-        let boxLocation = panGesture.locationInView(flickableView)
+    @objc fileprivate func handleAttachmentGesture(_ panGesture: UIPanGestureRecognizer) {
+        let location = panGesture.location(in: view)
+        let boxLocation = panGesture.location(in: flickableView)
         switch panGesture.state {
-        case .Began:
+        case .began:
             animator.removeAllBehaviors()
             let centerOffset = UIOffset(horizontal: boxLocation.x-flickableView.bounds.midX, vertical: boxLocation.y-flickableView.bounds.midY)
             attachmentBehavior = UIAttachmentBehavior(item: flickableView, offsetFromCenter: centerOffset, attachedToAnchor: location)
             animator.addBehavior(attachmentBehavior)
-        case .Ended:
+        case .ended:
             animator.removeAllBehaviors()
-            let velocity = panGesture.velocityInView(view)
+            let velocity = panGesture.velocity(in: view)
             let magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y))
             guard magnitude > flickThreshold else {
-                snapBehaviour = UISnapBehavior(item: flickableView, snapToPoint: originalCenter ?? view.center)
+                snapBehaviour = UISnapBehavior(item: flickableView, snapTo: originalCenter ?? view.center)
                 snapBehaviour.damping = snapDamping
                 animator.addBehavior(snapBehaviour)
                 return
             }
             let centerOffset = UIOffset(horizontal: boxLocation.x-flickableView.bounds.midX, vertical: boxLocation.y-flickableView.bounds.midY)
-            pushBehaviour = UIPushBehavior(items: [flickableView], mode: .Instantaneous)
+            pushBehaviour = UIPushBehavior(items: [flickableView], mode: .instantaneous)
             pushBehaviour.pushDirection = CGVector(dx: velocity.x, dy: velocity.y)
-            pushBehaviour.setTargetOffsetFromCenter(centerOffset, forItem: flickableView)
+            pushBehaviour.setTargetOffsetFromCenter(centerOffset, for: flickableView)
             pushBehaviour.magnitude = magnitude * flickVelocityMultiplier
             animator.addBehavior(pushBehaviour)
-            dismissViewControllerAnimated(true, completion: nil)
+            dismiss(animated: true, completion: nil)
         default:
             attachmentBehavior.anchorPoint = location
         }
@@ -166,13 +166,13 @@ public class FlickToDismissViewController: UIViewController {
     // MARK:- Helpers
     
     /// Connect this to a button to dismiss the view controller.
-    @IBAction public func dismissViewController() {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction open func dismissViewController() {
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK:- Rotation
     
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // Remove behaviors on rotation in order to satisfy constraints
         animator.removeAllBehaviors()
         // Center view if there are no constraints

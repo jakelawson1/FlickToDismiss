@@ -22,9 +22,8 @@ class MainViewController: UIViewController {
     
     // MARK: Status bar
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden: Bool {
         return true
     }
 
 }
-
